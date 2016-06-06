@@ -8,17 +8,14 @@ public class tabScript : MonoBehaviour
     public GameObject[] TabBoxes;
 
     private float ytrans;
-
     private int lasttab;
-    private int frames;
-    private bool isclicked;
+    private int frames = 15;
+    private bool isclicked = false;
     private bool isCoroutineExecuting = false;
 
     void Start()
     {
         ytrans = TabBoxes[0].GetComponent<RectTransform>().rect.height;
-        isclicked = false;
-        frames = 15;
     }
 
     public void avatarClick()

@@ -2,65 +2,83 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class tabScript : MonoBehaviour {
+public class tabScript : MonoBehaviour
+{
 
     public GameObject[] TabBoxes;
 
     private float ytrans;
 
-    private bool isclicked;
     private int lasttab;
-
+    private int frames;
+    private bool isclicked;
+    private bool isCoroutineExecuting = false;
 
     void Start()
     {
         ytrans = TabBoxes[0].GetComponent<RectTransform>().rect.height;
         isclicked = false;
+        frames = 15;
     }
 
     public void avatarClick()
     {
-        tabClick(0);
+        StartCoroutine(tabClick(0, frames));
     }
     public void upgradeClick()
     {
-        tabClick(1);
+        StartCoroutine(tabClick(1, frames));
     }
     public void gachaClick()
     {
-        tabClick(2);
+        StartCoroutine(tabClick(2, frames));
     }
     public void relicClick()
     {
-        tabClick(3);
+        StartCoroutine(tabClick(3, frames));
     }
     public void shopClick()
     {
-        tabClick(4);
+        StartCoroutine(tabClick(4, frames));
     }
 
-    private void tabClick(int clicked)
+    IEnumerator tabClick(int clicked, int frames)
     {
+        if (isCoroutineExecuting) { yield break; }
+
+        isCoroutineExecuting = true;
+
         if (!isclicked)
         {
-            gameObject.transform.localPosition += (Vector3.up * ytrans);
-            TabBoxes[clicked].transform.localPosition += (Vector3.up * ytrans);
-            isclicked = true;
+            for (int i = 0; i < frames; i++)
+            {
+                gameObject.transform.localPosition += (Vector3.up * ytrans / frames);
+                TabBoxes[clicked].transform.localPosition += (Vector3.up * ytrans / frames);
+                isclicked = true;
+                yield return new WaitForEndOfFrame();
+            }
         }
         else
         {
-            gameObject.transform.localPosition += (Vector3.down * ytrans);
-            TabBoxes[lasttab].transform.localPosition += (Vector3.down * ytrans);
-            isclicked = false;
-
+            for (int i = 0; i < frames; i++)
+            {
+                gameObject.transform.localPosition += (Vector3.down * ytrans / frames);
+                TabBoxes[lasttab].transform.localPosition += (Vector3.down * ytrans / frames);
+                isclicked = false;
+                yield return new WaitForEndOfFrame();
+            }
             if (lasttab != clicked)
             {
-                gameObject.transform.localPosition += (Vector3.up * ytrans);
-                TabBoxes[clicked].transform.localPosition += (Vector3.up * ytrans);
-                isclicked = true;
+                for (int i = 0; i < frames; i++)
+                {
+                    gameObject.transform.localPosition += (Vector3.up * ytrans / frames);
+                    TabBoxes[clicked].transform.localPosition += (Vector3.up * ytrans / frames);
+                    isclicked = true;
+                    yield return new WaitForEndOfFrame();
+                }
             }
         }
-
         lasttab = clicked;
+        isCoroutineExecuting = false;
     }
 }

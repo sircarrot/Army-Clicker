@@ -5,6 +5,8 @@ using System.Collections;
 public class tabScript : MonoBehaviour
 {
 
+    //public GameObject[] Tabs;
+    public GameObject TabBox;
     public GameObject[] TabBoxes;
 
     private float ytrans;
